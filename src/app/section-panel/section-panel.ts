@@ -5,9 +5,11 @@ import {
   DestroyRef,
   ElementRef,
   NgZone,
+  effect,
   inject,
   input,
   output,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { Section } from '../cv-data';
@@ -24,8 +26,6 @@ import { Icon } from '../icon/icon';
     'aria-labelledby': 'panel-title',
     '[class.shown]': 'shown()',
     '[attr.aria-hidden]': '!shown()',
-    '[style.--ox]': 'originX() + "px"',
-    '[style.--oy]': 'originY() + "px"',
     '(transitionend)': 'onTransitionEnd($event)',
   },
 })
@@ -44,6 +44,24 @@ export class SectionPanel implements AfterViewInit {
   private readonly backBtn = viewChild<ElementRef<HTMLButtonElement>>('backBtn');
   private readonly title = viewChild<ElementRef<HTMLElement>>('title');
   private readonly body = viewChild<ElementRef<HTMLElement>>('body');
+
+  constructor() {
+    effect(() => {
+      const x = this.originX();
+      const y = this.originY();
+      const el = this.host.nativeElement;
+      const hidden = !untracked(this.shown);
+      if (hidden) {
+        el.style.transition = 'none';
+      }
+      el.style.setProperty('--ox', `${x}px`);
+      el.style.setProperty('--oy', `${y}px`);
+      if (hidden) {
+        void el.offsetWidth;
+        el.style.transition = '';
+      }
+    });
+  }
 
   ngAfterViewInit(): void {
     this.zone.runOutsideAngular(() => this.start());

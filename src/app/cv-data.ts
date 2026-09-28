@@ -10,7 +10,6 @@ export interface SectionItem {
   readonly meta?: string;
   readonly link?: ItemLink;
   readonly text: string;
-  /** Longer paragraph shown under the item's main line. */
   readonly description?: string;
 }
 

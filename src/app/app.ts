@@ -30,10 +30,7 @@ export class App {
   protected readonly fullName = FULL_NAME;
   protected readonly role = ROLE;
   protected readonly sections = SECTIONS;
-
-  /** Index of the section whose panel is rendered (stays set while it slides back). */
   protected readonly openIndex = signal<number | null>(null);
-  /** True while the panel is in its centered, visible state. */
   protected readonly shown = signal(false);
   protected readonly originX = signal(0);
   protected readonly originY = signal(0);
@@ -43,37 +40,73 @@ export class App {
   });
 
   private lastTrigger: HTMLElement | null = null;
+  private pending: SectionSelection | null = null;
+  private hideTimer: ReturnType<typeof setTimeout> | undefined;
+  private closing = false;
 
-  protected open({ index, trigger }: SectionSelection): void {
-    if (this.openIndex() !== null) {
+  protected open(selection: SectionSelection): void {
+    const openIndex = this.openIndex();
+    if (openIndex === null) {
+      this.show(selection);
       return;
     }
-    const rect = trigger.getBoundingClientRect();
-    this.originX.set(rect.left + rect.width / 2 - window.innerWidth / 2);
-    this.originY.set(rect.top + rect.height / 2 - window.innerHeight / 2);
-    this.lastTrigger = trigger;
-    this.openIndex.set(index);
-    // Let the panel render at its origin first, then transition to the center.
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        this.shown.set(true);
-        this.panel().focusBack();
-      }),
-    );
+    if (openIndex === selection.index && !this.closing) {
+      return;
+    }
+    if (!this.shown() && !this.closing) {
+      this.show(selection);
+      return;
+    }
+    this.pending = selection;
+    if (!this.closing) {
+      this.hide();
+    }
   }
 
   protected close(): void {
     if (!this.shown()) {
       return;
     }
-    this.shown.set(false);
+    this.pending = null;
+    this.hide();
     this.lastTrigger?.focus();
-    setTimeout(() => this.onPanelHidden(), CLOSE_FALLBACK_MS);
   }
 
   protected onPanelHidden(): void {
-    if (!this.shown()) {
-      this.openIndex.set(null);
+    if (!this.closing) {
+      return;
     }
+    this.closing = false;
+    clearTimeout(this.hideTimer);
+    this.openIndex.set(null);
+    const next = this.pending;
+    this.pending = null;
+    if (next) {
+      this.show(next);
+    }
+  }
+
+  private show({ index, trigger }: SectionSelection): void {
+    const rect = trigger.getBoundingClientRect();
+    this.originX.set(rect.left + rect.width / 2 - window.innerWidth / 2);
+    this.originY.set(rect.top + rect.height / 2 - window.innerHeight / 2);
+    this.lastTrigger = trigger;
+    this.openIndex.set(index);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if (this.openIndex() !== index) {
+          return;
+        }
+        this.shown.set(true);
+        this.panel().focusBack();
+      }),
+    );
+  }
+
+  private hide(): void {
+    this.closing = true;
+    this.shown.set(false);
+    clearTimeout(this.hideTimer);
+    this.hideTimer = setTimeout(() => this.onPanelHidden(), CLOSE_FALLBACK_MS);
   }
 }
