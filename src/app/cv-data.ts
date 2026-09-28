@@ -1,8 +1,14 @@
 export type ItemIcon = 'phone' | 'mail' | 'home';
 
+export interface ItemLink {
+  readonly label: string;
+  readonly href: string;
+}
+
 export interface SectionItem {
   readonly icon?: ItemIcon;
   readonly meta?: string;
+  readonly link?: ItemLink;
   readonly text: string;
 }
 
@@ -28,7 +34,8 @@ export const SECTIONS: readonly Section[] = [
     items: [
       {
         meta: '2020 – 2025',
-        text: 'Debreceni Egyetem Informatikai Kar, Programtervező Informatikus szak BSc.',
+        link: { label: 'Debreceni Egyetem Informatikai Kar', href: 'https://inf.unideb.hu/' },
+        text: ', Programtervező Informatikus szak BSc.',
       },
     ],
   },
@@ -37,11 +44,13 @@ export const SECTIONS: readonly Section[] = [
     items: [
       {
         meta: '2022.06 – 2022.08',
-        text: 'InnoviDeb Solutions Kft. – Gyakornok frontend fejlesztő, szoftvertesztelő',
+        link: { label: 'InnoviDeb Solutions Kft.', href: 'https://innovitech.hu/' },
+        text: ' – Gyakornok frontend fejlesztő, szoftvertesztelő',
       },
       {
         meta: '2025.09 –',
-        text: 'E-Health Innovációs Klaszter Kft. – Junior frontend fejlesztő',
+        link: { label: 'E-Health Innovációs Klaszter Kft.', href: 'https://ehik.hu/' },
+        text: ' – Junior frontend fejlesztő',
       },
     ],
   },
@@ -50,7 +59,7 @@ export const SECTIONS: readonly Section[] = [
     items: [
       { text: 'C1 Angol nyelvtudás' },
       { text: 'Angular' },
-      { text: 'JavaScript' },
+      { text: 'JavaScript, TypeScript' },
       { text: 'HTML, CSS' },
       { text: 'Git' },
       { text: 'Figma & Penpot' },

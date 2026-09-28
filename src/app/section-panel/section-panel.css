@@ -90,6 +90,36 @@ h2 {
   white-space: nowrap;
 }
 
+.text a {
+  color: #000;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-thickness 0.2s ease;
+}
+
+.text a:hover,
+.text a:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+.text a:focus-visible {
+  outline: 1px solid #000;
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (max-width: 600px) {
   :host {
     padding: 22px 20px 24px;
