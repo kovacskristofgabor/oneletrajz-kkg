@@ -1,0 +1,26 @@
+:host {
+  position: fixed;
+  right: 48px;
+  bottom: 40px;
+  z-index: 2;
+  display: block;
+  max-width: calc(100vw - 64px);
+  pointer-events: none;
+  user-select: none;
+}
+
+p {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-align: right;
+  will-change: transform;
+}
+
+@media (max-width: 600px) {
+  :host {
+    right: 20px;
+    bottom: 20px;
+    max-width: calc(100vw - 40px);
+  }
+}

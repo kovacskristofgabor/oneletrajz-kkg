@@ -9,6 +9,8 @@
   (selected)="open($event)"
 />
 
+<app-copyright [name]="fullName" [frozen]="openIndex() !== null" />
+
 <app-section-panel
   [section]="current()"
   [shown]="shown()"

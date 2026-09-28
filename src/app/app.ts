@@ -6,6 +6,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CodeRain } from './code-rain/code-rain';
+import { Copyright } from './copyright/copyright';
 import { FULL_NAME, ROLE, SECTIONS } from './cv-data';
 import { Hero, SectionSelection } from './hero/hero';
 import { SectionPanel } from './section-panel/section-panel';
@@ -15,7 +16,7 @@ const CLOSE_FALLBACK_MS = 700;
 
 @Component({
   selector: 'app-root',
-  imports: [CodeRain, Hero, SectionPanel],
+  imports: [CodeRain, Copyright, Hero, SectionPanel],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
