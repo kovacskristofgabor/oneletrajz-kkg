@@ -1,3 +1,5 @@
+import { ClickWaves } from './click-waves';
+
 const MAGNET_RADIUS = 260;
 const MAGNET_STRENGTH = 22;
 const SMOOTHING = 0.08;
@@ -7,6 +9,8 @@ export interface FloatOptions {
   readonly phaseOffset?: number;
   /** Floating amplitude in px for each element; defaults to 3. */
   readonly amplitudes?: readonly number[];
+  /** Click waves that push the elements away as they pass. */
+  readonly waves?: ClickWaves;
 }
 
 interface Floater {
@@ -19,7 +23,8 @@ interface Floater {
 }
 
 /**
- * Makes the elements float gently and drift toward the cursor.
+ * Makes the elements float gently, drift toward the cursor and get pushed
+ * away by passing click waves.
  * While `isFrozen()` returns true they stand still. Returns a cleanup function.
  * Must be called outside the Angular zone.
  */
@@ -55,7 +60,8 @@ export function startFloating(
   document.addEventListener('pointerleave', onLeave);
   window.addEventListener('blur', onLeave);
 
-  const update = (t: number) => {
+  const update = (now: number) => {
+    const t = now / 1000;
     for (const f of floaters) {
       const rect = f.el.getBoundingClientRect();
       const baseX = rect.left + rect.width / 2 - f.x;
@@ -73,6 +79,12 @@ export function startFloating(
         targetY += (dy / dist) * pull;
       }
 
+      if (options.waves) {
+        const push = options.waves.pushAt(baseX, baseY, now);
+        targetX += push.x;
+        targetY += push.y;
+      }
+
       f.x += (targetX - f.x) * SMOOTHING;
       f.y += (targetY - f.y) * SMOOTHING;
       f.el.style.transform = `translate3d(${f.x.toFixed(2)}px, ${f.y.toFixed(2)}px, 0)`;
@@ -86,7 +98,7 @@ export function startFloating(
       return;
     }
     try {
-      update(now / 1000);
+      update(now);
     } catch (error) {
       console.error(error);
     }

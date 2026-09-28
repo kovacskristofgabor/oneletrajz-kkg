@@ -11,6 +11,7 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
+import { ClickWaves } from '../click-waves';
 import { Section } from '../cv-data';
 import { startFloating } from '../floating';
 
@@ -28,6 +29,7 @@ export interface SectionSelection {
 export class Hero implements AfterViewInit {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly waves = inject(ClickWaves);
 
   readonly name = input.required<string>();
   readonly role = input.required<string>();
@@ -48,6 +50,7 @@ export class Hero implements AfterViewInit {
     const stop = this.zone.runOutsideAngular(() =>
       startFloating(labels, () => this.activeIndex() !== null, {
         amplitudes: labels.map((_, i) => (i < 2 ? 4 : 3)),
+        waves: this.waves,
       }),
     );
     this.destroyRef.onDestroy(stop);

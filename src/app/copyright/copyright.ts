@@ -9,6 +9,7 @@ import {
   input,
   viewChild,
 } from '@angular/core';
+import { ClickWaves } from '../click-waves';
 import { startFloating } from '../floating';
 
 @Component({
@@ -20,6 +21,7 @@ import { startFloating } from '../floating';
 export class Copyright implements AfterViewInit {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly waves = inject(ClickWaves);
 
   readonly name = input.required<string>();
   readonly frozen = input(false);
@@ -28,7 +30,10 @@ export class Copyright implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const stop = this.zone.runOutsideAngular(() =>
-      startFloating([this.text().nativeElement], () => this.frozen(), { phaseOffset: 9 }),
+      startFloating([this.text().nativeElement], () => this.frozen(), {
+        phaseOffset: 9,
+        waves: this.waves,
+      }),
     );
     this.destroyRef.onDestroy(stop);
   }
