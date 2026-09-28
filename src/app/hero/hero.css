@@ -1,0 +1,75 @@
+:host {
+  position: fixed;
+  top: 48px;
+  left: 48px;
+  z-index: 2;
+  display: block;
+  max-width: calc(100vw - 64px);
+}
+
+.name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  will-change: transform;
+}
+
+.role {
+  margin: 10px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  will-change: transform;
+}
+
+.menu {
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.menu-item {
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #000;
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+  will-change: transform;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  border-bottom-color: #000;
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  :host {
+    top: 24px;
+    left: 20px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .name {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-item {
+    transition: none;
+  }
+}

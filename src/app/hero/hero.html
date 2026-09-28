@@ -1,0 +1,20 @@
+<h1 #nameEl class="name">{{ name() }}</h1>
+<p #roleEl class="role">{{ role() }}</p>
+
+<nav aria-label="Önéletrajz szakaszai">
+  <ul class="menu">
+    @for (section of sections(); track section.title; let i = $index) {
+      <li>
+        <button
+          #menuItem
+          type="button"
+          class="menu-item"
+          [attr.aria-expanded]="activeIndex() === i"
+          (click)="select(i, $event.currentTarget)"
+        >
+          {{ section.title }}
+        </button>
+      </li>
+    }
+  </ul>
+</nav>

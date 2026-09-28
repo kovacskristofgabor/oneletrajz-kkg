@@ -1,0 +1,22 @@
+@if (section(); as section) {
+  <div class="head">
+    <button #backBtn type="button" class="back" (click)="back.emit()" aria-label="Vissza">
+      &larr;
+    </button>
+    <h2 #title id="panel-title">{{ section.title }}</h2>
+  </div>
+
+  <div #body class="body">
+    @for (item of section.items; track $index) {
+      <p class="item">
+        @if (item.icon; as icon) {
+          <app-icon class="icon" [name]="icon" />
+        }
+        @if (item.meta; as meta) {
+          <span class="meta">{{ meta }}</span>
+        }
+        <span class="text">{{ item.text }}</span>
+      </p>
+    }
+  </div>
+}

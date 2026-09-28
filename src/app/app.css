@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  color: #000;
+}
+
+.dim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.6s ease;
+}
+
+.dim.shown {
+  background: rgba(0, 0, 0, 0.045);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dim {
+    transition: none;
+  }
+}
