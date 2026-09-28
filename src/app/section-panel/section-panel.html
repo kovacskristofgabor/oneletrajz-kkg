@@ -8,19 +8,24 @@
 
   <div #body class="body">
     @for (item of section.items; track $index) {
-      <p class="item">
+      <div class="item">
         @if (item.icon; as icon) {
           <app-icon class="icon" [name]="icon" />
         }
         @if (item.meta; as meta) {
           <span class="meta">{{ meta }}</span>
         }
-        <span class="text"
-          >@if (item.link; as link) {<a [href]="link.href" target="_blank" rel="noopener noreferrer"
-              >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
-            >}{{ item.text }}</span
-        >
-      </p>
+        <div class="content">
+          <span class="text"
+            >@if (item.link; as link) {<a [href]="link.href" target="_blank" rel="noopener noreferrer"
+                >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
+              >}{{ item.text }}</span
+          >
+          @if (item.description; as description) {
+            <p class="description">{{ description }}</p>
+          }
+        </div>
+      </div>
     }
   </div>
 }
