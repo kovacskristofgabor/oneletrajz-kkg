@@ -7,7 +7,7 @@
  * the reveal reads as a code stream rather than static noise.
  *
  * A click sends a ring-shaped wave of glyphs from the click position to the
- * edge of the screen. The once-per-second limit lives in ClickWaves.
+ * edge of the screen. The cooldown between waves lives in ClickWaves.
  */
 
 import { WAVE_BAND, WAVE_SPEED } from '../click-waves';

@@ -6,38 +6,43 @@
     <h2 #title id="panel-title">{{ section.title }}</h2>
   </div>
 
-  <div #body class="body">
-    @for (item of section.items; track $index) {
-      <div class="item">
-        @if (item.icon; as icon) {
-          <app-icon class="icon" [name]="icon" />
+  <div class="scroll-area">
+    <div #scroller class="scroll" tabindex="0">
+      <div #body class="body">
+        @for (item of section.items; track $index) {
+          <div class="item">
+            @if (item.icon; as icon) {
+              <app-icon class="icon" [name]="icon" />
+            }
+            @if (item.meta; as meta) {
+              <span class="meta">{{ meta }}</span>
+            }
+            <div class="content">
+              @if (item.link || item.text) {
+                <span class="text"
+                  >@if (item.link; as link) {<a [href]="link.href" target="_blank" rel="noopener noreferrer"
+                      >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
+                    >}{{ item.text }}</span
+                >
+              }
+              @if (item.paragraph; as paragraph) {
+                <p class="paragraph"
+                  >@for (part of paragraph; track $index) {@if (asLink(part); as link) {<a
+                        [href]="link.href"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
+                      >} @else {<span>{{ part }}</span>}}</p
+                >
+              }
+              @for (paragraph of item.description; track $index) {
+                <p class="description">{{ paragraph }}</p>
+              }
+            </div>
+          </div>
         }
-        @if (item.meta; as meta) {
-          <span class="meta">{{ meta }}</span>
-        }
-        <div class="content">
-          @if (item.link || item.text) {
-            <span class="text"
-              >@if (item.link; as link) {<a [href]="link.href" target="_blank" rel="noopener noreferrer"
-                  >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
-                >}{{ item.text }}</span
-            >
-          }
-          @if (item.paragraph; as paragraph) {
-            <p class="paragraph"
-              >@for (part of paragraph; track $index) {@if (asLink(part); as link) {<a
-                    [href]="link.href"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
-                  >} @else {<span>{{ part }}</span>}}</p
-            >
-          }
-          @for (paragraph of item.description; track $index) {
-            <p class="description">{{ paragraph }}</p>
-          }
-        </div>
       </div>
-    }
+    </div>
+    <app-scroll-indicator [for]="scroller" />
   </div>
 }

@@ -1,15 +1,22 @@
 :host {
   --ox: 0px;
   --oy: 0px;
+  --pad-top: 28px;
+  --pad-x: 32px;
+  --pad-bottom: 32px;
+  --free-left: calc(var(--hero-right, 0px) + 32px);
+  --free-right: 32px;
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: calc((var(--free-left) + 100vw - var(--free-right)) / 2);
   z-index: 3;
-  display: block;
-  width: min(560px, calc(100vw - 32px));
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  width: max(320px, min(560px, calc(100vw - var(--free-left) - var(--free-right))));
+  max-height: calc(100vh - 144px);
+  overflow: hidden;
+  container: panel / inline-size;
+  padding-top: var(--pad-top);
   background: #fff;
   border: 1px solid #000;
   opacity: 0;
@@ -27,10 +34,38 @@
 }
 
 .head {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 22px;
+  padding: 0 var(--pad-x) 22px;
+}
+
+.scroll-area {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--pad-x) var(--pad-bottom);
+  /* The thin black app-scroll-indicator replaces the native scrollbar. */
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
 }
 
 .back {
@@ -153,11 +188,28 @@ h2 {
   border: 0;
 }
 
+@media (max-width: 899px) {
+  :host {
+    --free-top: calc(var(--hero-bottom, 0px) + 20px);
+    --free-bottom: 72px;
+    left: 50%;
+    width: min(560px, calc(100vw - 32px));
+    top: calc((var(--free-top) + 100vh - var(--free-bottom)) / 2);
+    top: calc((var(--free-top) + 100dvh - var(--free-bottom)) / 2);
+    max-height: max(220px, calc(100vh - var(--free-top) - var(--free-bottom)));
+    max-height: max(220px, calc(100dvh - var(--free-top) - var(--free-bottom)));
+  }
+}
+
 @media (max-width: 600px) {
   :host {
-    padding: 22px 20px 24px;
+    --pad-top: 22px;
+    --pad-x: 20px;
+    --pad-bottom: 24px;
   }
+}
 
+@container panel (max-width: 480px) {
   .item {
     flex-wrap: wrap;
     gap: 4px 12px;

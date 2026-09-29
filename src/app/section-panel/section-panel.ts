@@ -14,10 +14,11 @@ import {
 } from '@angular/core';
 import { ItemLink, Section } from '../cv-data';
 import { Icon } from '../icon/icon';
+import { ScrollIndicator } from '../scroll-indicator/scroll-indicator';
 
 @Component({
   selector: 'app-section-panel',
-  imports: [Icon],
+  imports: [Icon, ScrollIndicator],
   templateUrl: './section-panel.html',
   styleUrl: './section-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,6 +70,11 @@ export class SectionPanel implements AfterViewInit {
 
   protected asLink(part: string | ItemLink): ItemLink | null {
     return typeof part === 'string' ? null : part;
+  }
+
+  anchor(): { x: number; y: number } {
+    const style = getComputedStyle(this.host.nativeElement);
+    return { x: parseFloat(style.left), y: parseFloat(style.top) };
   }
 
   focusBack(): void {

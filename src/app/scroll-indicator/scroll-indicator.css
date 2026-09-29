@@ -1,0 +1,45 @@
+:host {
+  position: absolute;
+  top: 0;
+  right: 6px;
+  bottom: 12px;
+  width: 12px;
+  visibility: hidden;
+}
+
+:host(.visible) {
+  visibility: visible;
+}
+
+:host::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 5px;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  cursor: grab;
+  touch-action: none;
+}
+
+.thumb::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 4.5px;
+  width: 2px;
+  background: #000;
+}
+
+.thumb.dragging {
+  cursor: grabbing;
+}

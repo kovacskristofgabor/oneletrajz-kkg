@@ -79,8 +79,9 @@ export class App {
 
   private show({ section, trigger }: SectionSelection): void {
     const rect = trigger.getBoundingClientRect();
-    this.originX.set(rect.left + rect.width / 2 - window.innerWidth / 2);
-    this.originY.set(rect.top + rect.height / 2 - window.innerHeight / 2);
+    const anchor = this.panel().anchor();
+    this.originX.set(rect.left + rect.width / 2 - anchor.x);
+    this.originY.set(rect.top + rect.height / 2 - anchor.y);
     this.lastTrigger = trigger;
     this.openSection.set(section);
     requestAnimationFrame(() =>

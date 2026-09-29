@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 export const WAVE_SPEED = 1400;
 /** Thickness of the drawn wave ring in px. */
 export const WAVE_BAND = 70;
-const WAVE_COOLDOWN_MS = 1000;
+/** Minimum time between two click waves. */
+const WAVE_COOLDOWN_MS = 250;
 
 /** Peak push (px) a passing wave gives a floating label. */
 const PUSH_STRENGTH = 70;
@@ -34,7 +35,7 @@ export class ClickWaves {
   private waves: ClickWave[] = [];
   private lastT = Number.NEGATIVE_INFINITY;
 
-  /** Starts a wave unless one already started within the last second. */
+  /** Starts a wave unless one already started within the cooldown. */
   start(x: number, y: number, now: number): boolean {
     if (now - this.lastT < WAVE_COOLDOWN_MS) {
       return false;

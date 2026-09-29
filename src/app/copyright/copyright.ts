@@ -14,7 +14,7 @@ import { startFloating } from '../floating';
 
 @Component({
   selector: 'app-copyright',
-  template: `<p #text>© 2026 Kovács Kristóf Gábor · Open Source · MIT License</p>`,
+  template: `<p #text>© 2026 Kovács Kristóf Gábor · MIT License</p>`,
   styleUrl: './copyright.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -30,6 +30,7 @@ export class Hero implements AfterViewInit {
   private readonly zone = inject(NgZone);
   private readonly destroyRef = inject(DestroyRef);
   private readonly waves = inject(ClickWaves);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly name = input.required<string>();
   readonly role = input.required<string>();
@@ -55,6 +56,25 @@ export class Hero implements AfterViewInit {
       }),
     );
     this.destroyRef.onDestroy(stop);
+    this.publishBottom();
+  }
+  
+  private publishBottom(): void {
+    const host = this.host.nativeElement;
+    const root = document.documentElement;
+    const update = () => {
+      const rect = host.getBoundingClientRect();
+      root.style.setProperty('--hero-bottom', `${Math.ceil(rect.bottom)}px`);
+      root.style.setProperty('--hero-right', `${Math.ceil(rect.right)}px`);
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(host);
+    window.addEventListener('resize', update);
+    this.destroyRef.onDestroy(() => {
+      observer.disconnect();
+      window.removeEventListener('resize', update);
+    });
   }
 
   protected select(section: Section, trigger: EventTarget | null): void {
