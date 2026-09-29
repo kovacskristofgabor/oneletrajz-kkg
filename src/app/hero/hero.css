@@ -17,8 +17,28 @@
   will-change: transform;
 }
 
+.name-button {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+  color: #000;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.name-button:hover,
+.name-button:focus-visible {
+  border-bottom-color: #000;
+  outline: none;
+}
+
 .role {
-  margin: 10px 0 0;
+  margin: 20px 0 0;
   font-size: 12px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -69,6 +89,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .name-button,
   .menu-item {
     transition: none;
   }

@@ -20,6 +20,11 @@ import { ItemIcon } from '../cv-data';
           <path d="M5 10v10h14V10" />
           <path d="M10 20v-6h4v6" />
         }
+        @case ('code') {
+          <path d="M8 7l-5 5 5 5" />
+          <path d="M16 7l5 5-5 5" />
+          <path d="M14 4l-4 16" />
+        }
       }
     </svg>
   `,

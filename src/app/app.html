@@ -1,18 +1,19 @@
-<app-code-rain [wavesEnabled]="openIndex() === null" />
+<app-code-rain [wavesEnabled]="openSection() === null" />
 <div class="dim" [class.shown]="shown()" aria-hidden="true"></div>
 
 <app-hero
   [name]="fullName"
   [role]="role"
   [sections]="sections"
-  [activeIndex]="openIndex()"
+  [about]="about"
+  [active]="openSection()"
   (selected)="open($event)"
 />
 
-<app-copyright [name]="fullName" [frozen]="openIndex() !== null" />
+<app-copyright [name]="fullName" [frozen]="openSection() !== null" />
 
 <app-section-panel
-  [section]="current()"
+  [section]="openSection()"
   [shown]="shown()"
   [originX]="originX()"
   [originY]="originY()"

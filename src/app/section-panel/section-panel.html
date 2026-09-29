@@ -16,13 +16,25 @@
           <span class="meta">{{ meta }}</span>
         }
         <div class="content">
-          <span class="text"
-            >@if (item.link; as link) {<a [href]="link.href" target="_blank" rel="noopener noreferrer"
-                >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
-              >}{{ item.text }}</span
-          >
-          @if (item.description; as description) {
-            <p class="description">{{ description }}</p>
+          @if (item.link || item.text) {
+            <span class="text"
+              >@if (item.link; as link) {<a [href]="link.href" target="_blank" rel="noopener noreferrer"
+                  >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
+                >}{{ item.text }}</span
+            >
+          }
+          @if (item.paragraph; as paragraph) {
+            <p class="paragraph"
+              >@for (part of paragraph; track $index) {@if (asLink(part); as link) {<a
+                    [href]="link.href"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >{{ link.label }}<span class="visually-hidden"> (új lapon nyílik meg)</span></a
+                  >} @else {<span>{{ part }}</span>}}</p
+            >
+          }
+          @for (paragraph of item.description; track $index) {
+            <p class="description">{{ paragraph }}</p>
           }
         </div>
       </div>

@@ -12,7 +12,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { Section } from '../cv-data';
+import { ItemLink, Section } from '../cv-data';
 import { Icon } from '../icon/icon';
 
 @Component({
@@ -65,6 +65,10 @@ export class SectionPanel implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.zone.runOutsideAngular(() => this.start());
+  }
+
+  protected asLink(part: string | ItemLink): ItemLink | null {
+    return typeof part === 'string' ? null : part;
   }
 
   focusBack(): void {

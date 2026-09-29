@@ -100,14 +100,27 @@ h2 {
 }
 
 .description {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   font-size: 12px;
   line-height: 1.75;
   text-align: justify;
   hyphens: auto;
 }
 
-.text a {
+.item:has(.paragraph):not(:last-child) {
+  margin-bottom: 18px;
+}
+
+.paragraph {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.85;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.text a,
+.paragraph a {
   color: #000;
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -116,11 +129,14 @@ h2 {
 }
 
 .text a:hover,
-.text a:focus-visible {
+.text a:focus-visible,
+.paragraph a:hover,
+.paragraph a:focus-visible {
   text-decoration-thickness: 2px;
 }
 
-.text a:focus-visible {
+.text a:focus-visible,
+.paragraph a:focus-visible {
   outline: 1px solid #000;
   outline-offset: 2px;
 }

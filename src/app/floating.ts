@@ -2,6 +2,7 @@ import { ClickWaves } from './click-waves';
 
 const MAGNET_RADIUS = 260;
 const MAGNET_STRENGTH = 22;
+const MAGNET_MAX_SHARE = 0.2;
 const SMOOTHING = 0.08;
 
 export interface FloatOptions {
@@ -74,7 +75,10 @@ export function startFloating(
       const dy = cursorY - baseY;
       const dist = Math.hypot(dx, dy);
       if (dist < MAGNET_RADIUS && dist > 0.1) {
-        const pull = (1 - dist / MAGNET_RADIUS) ** 2 * MAGNET_STRENGTH;
+        const pull = Math.min(
+          (1 - dist / MAGNET_RADIUS) ** 2 * MAGNET_STRENGTH,
+          dist * MAGNET_MAX_SHARE,
+        );
         targetX += (dx / dist) * pull;
         targetY += (dy / dist) * pull;
       }

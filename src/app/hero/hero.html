@@ -1,16 +1,25 @@
-<h1 #nameEl class="name">{{ name() }}</h1>
+<h1 #nameEl class="name">
+  <button
+    type="button"
+    class="name-button"
+    [attr.aria-expanded]="active() === about()"
+    (click)="select(about(), $event.currentTarget)"
+  >
+    {{ name() }}
+  </button>
+</h1>
 <p #roleEl class="role">{{ role() }}</p>
 
 <nav aria-label="Önéletrajz szakaszai">
   <ul class="menu">
-    @for (section of sections(); track section.title; let i = $index) {
+    @for (section of sections(); track section.title) {
       <li>
         <button
           #menuItem
           type="button"
           class="menu-item"
-          [attr.aria-expanded]="activeIndex() === i"
-          (click)="select(i, $event.currentTarget)"
+          [attr.aria-expanded]="active() === section"
+          (click)="select(section, $event.currentTarget)"
         >
           {{ section.title }}
         </button>

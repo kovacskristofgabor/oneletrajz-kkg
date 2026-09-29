@@ -16,7 +16,7 @@ import { Section } from '../cv-data';
 import { startFloating } from '../floating';
 
 export interface SectionSelection {
-  readonly index: number;
+  readonly section: Section;
   readonly trigger: HTMLElement;
 }
 
@@ -34,7 +34,8 @@ export class Hero implements AfterViewInit {
   readonly name = input.required<string>();
   readonly role = input.required<string>();
   readonly sections = input.required<readonly Section[]>();
-  readonly activeIndex = input<number | null>(null);
+  readonly about = input.required<Section>();
+  readonly active = input<Section | null>(null);
   readonly selected = output<SectionSelection>();
 
   private readonly nameEl = viewChild.required<ElementRef<HTMLElement>>('nameEl');
@@ -48,7 +49,7 @@ export class Hero implements AfterViewInit {
       ...this.menuEls().map((ref) => ref.nativeElement),
     ];
     const stop = this.zone.runOutsideAngular(() =>
-      startFloating(labels, () => this.activeIndex() !== null, {
+      startFloating(labels, () => this.active() !== null, {
         amplitudes: labels.map((_, i) => (i < 2 ? 4 : 3)),
         waves: this.waves,
       }),
@@ -56,9 +57,9 @@ export class Hero implements AfterViewInit {
     this.destroyRef.onDestroy(stop);
   }
 
-  protected select(index: number, trigger: EventTarget | null): void {
+  protected select(section: Section, trigger: EventTarget | null): void {
     if (trigger instanceof HTMLElement) {
-      this.selected.emit({ index, trigger });
+      this.selected.emit({ section, trigger });
     }
   }
 }

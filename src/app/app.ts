@@ -1,13 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { CodeRain } from './code-rain/code-rain';
 import { Copyright } from './copyright/copyright';
-import { FULL_NAME, ROLE, SECTIONS } from './cv-data';
+import { ABOUT, FULL_NAME, ROLE, SECTIONS, Section } from './cv-data';
 import { Hero, SectionSelection } from './hero/hero';
 import { SectionPanel } from './section-panel/section-panel';
 
@@ -30,14 +24,11 @@ export class App {
   protected readonly fullName = FULL_NAME;
   protected readonly role = ROLE;
   protected readonly sections = SECTIONS;
-  protected readonly openIndex = signal<number | null>(null);
+  protected readonly about = ABOUT;
+  protected readonly openSection = signal<Section | null>(null);
   protected readonly shown = signal(false);
   protected readonly originX = signal(0);
   protected readonly originY = signal(0);
-  protected readonly current = computed(() => {
-    const i = this.openIndex();
-    return i === null ? null : SECTIONS[i];
-  });
 
   private lastTrigger: HTMLElement | null = null;
   private pending: SectionSelection | null = null;
@@ -45,12 +36,12 @@ export class App {
   private closing = false;
 
   protected open(selection: SectionSelection): void {
-    const openIndex = this.openIndex();
-    if (openIndex === null) {
+    const openSection = this.openSection();
+    if (openSection === null) {
       this.show(selection);
       return;
     }
-    if (openIndex === selection.index && !this.closing) {
+    if (openSection === selection.section && !this.closing) {
       return;
     }
     if (!this.shown() && !this.closing) {
@@ -78,7 +69,7 @@ export class App {
     }
     this.closing = false;
     clearTimeout(this.hideTimer);
-    this.openIndex.set(null);
+    this.openSection.set(null);
     const next = this.pending;
     this.pending = null;
     if (next) {
@@ -86,15 +77,15 @@ export class App {
     }
   }
 
-  private show({ index, trigger }: SectionSelection): void {
+  private show({ section, trigger }: SectionSelection): void {
     const rect = trigger.getBoundingClientRect();
     this.originX.set(rect.left + rect.width / 2 - window.innerWidth / 2);
     this.originY.set(rect.top + rect.height / 2 - window.innerHeight / 2);
     this.lastTrigger = trigger;
-    this.openIndex.set(index);
+    this.openSection.set(section);
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        if (this.openIndex() !== index) {
+        if (this.openSection() !== section) {
           return;
         }
         this.shown.set(true);

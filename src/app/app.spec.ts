@@ -50,6 +50,43 @@ describe('App', () => {
     expect(items[1].getAttribute('aria-expanded')).toBe('true');
     expect(items[0].getAttribute('aria-expanded')).toBe('false');
   });
+
+  it('should link to the project source under the contact details', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.autoDetectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const panel = () => compiled.querySelector('app-section-panel');
+
+    compiled.querySelector<HTMLButtonElement>('.menu-item')!.click();
+    await waitFor(() => panel()?.classList.contains('shown') === true);
+
+    const items = panel()!.querySelectorAll('.item');
+    const link = items[items.length - 1].querySelector('a')!;
+    expect(link.textContent).toContain('Ennek a projektnek a kódja');
+    expect(link.getAttribute('href')).toBe('https://github.com/kovacskristofgabor/oneletrajz-kkg');
+  });
+
+  it('should open the about section when the name is clicked', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.autoDetectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const panel = () => compiled.querySelector('app-section-panel');
+
+    compiled.querySelector<HTMLButtonElement>('.name-button')!.click();
+    await waitFor(() => panel()?.classList.contains('shown') === true);
+
+    expect(panel()!.querySelector('h2')?.textContent?.trim()).toBe('Ki vagyok én?');
+    expect(panel()!.querySelectorAll('.paragraph').length).toBe(5);
+    const body = panel()!.querySelector('.body')!;
+    expect(body.textContent).toContain('zenéket "Kill Lincs');
+    expect(body.textContent).toContain('az "IKON Zrt.');
+    expect(body.textContent).toContain('Kedvenc állatom a capybara.');
+    const hrefs = Array.from(body.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+    expect(hrefs).toEqual([
+      'https://open.spotify.com/artist/012Y4YEbRYW43JrxZqwMDy?si=JMyv0-7JQROCtESO6INGPQ',
+      'https://www.instagram.com/ikonzrt/',
+    ]);
+  });
 });
 
 async function waitFor(condition: () => boolean, timeoutMs = 3000): Promise<void> {
