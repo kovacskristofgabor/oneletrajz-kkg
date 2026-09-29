@@ -6,13 +6,14 @@
   --pad-bottom: 32px;
   --free-left: calc(var(--hero-right, 0px) + 32px);
   --free-right: 32px;
+  --panel-width: max(320px, min(560px, calc(100vw - var(--free-left) - var(--free-right))));
   position: fixed;
   top: 50%;
-  left: calc((var(--free-left) + 100vw - var(--free-right)) / 2);
+  left: max(50vw, calc(var(--free-left) + var(--panel-width) / 2));
   z-index: 3;
   display: flex;
   flex-direction: column;
-  width: max(320px, min(560px, calc(100vw - var(--free-left) - var(--free-right))));
+  width: var(--panel-width);
   max-height: calc(100vh - 144px);
   overflow: hidden;
   container: panel / inline-size;
@@ -55,7 +56,6 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 0 var(--pad-x) var(--pad-bottom);
-  /* The thin black app-scroll-indicator replaces the native scrollbar. */
   scrollbar-width: none;
 }
 

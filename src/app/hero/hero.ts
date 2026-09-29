@@ -15,6 +15,9 @@ import { ClickWaves } from '../click-waves';
 import { Section } from '../cv-data';
 import { startFloating } from '../floating';
 
+const HINT_INTERVAL_MS = 3000;
+const HINT_VISIBLE_MS = 1200;
+
 export interface SectionSelection {
   readonly section: Section;
   readonly trigger: HTMLElement;
@@ -40,6 +43,7 @@ export class Hero implements AfterViewInit {
   readonly selected = output<SectionSelection>();
 
   private readonly nameEl = viewChild.required<ElementRef<HTMLElement>>('nameEl');
+  private readonly nameButton = viewChild.required<ElementRef<HTMLElement>>('nameButton');
   private readonly roleEl = viewChild.required<ElementRef<HTMLElement>>('roleEl');
   private readonly menuEls = viewChildren<ElementRef<HTMLElement>>('menuItem');
 
@@ -57,6 +61,32 @@ export class Hero implements AfterViewInit {
     );
     this.destroyRef.onDestroy(stop);
     this.publishBottom();
+    this.zone.runOutsideAngular(() => this.startHints());
+  }
+
+  private startHints(): void {
+    const buttons = [
+      this.nameButton().nativeElement,
+      ...this.menuEls().map((ref) => ref.nativeElement),
+    ];
+    let next = 0;
+    let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const interval = setInterval(() => {
+      if (this.active() !== null) {
+        return;
+      }
+      const button = buttons[next];
+      next = (next + 1) % buttons.length;
+      button.classList.add('hint');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => button.classList.remove('hint'), HINT_VISIBLE_MS);
+    }, HINT_INTERVAL_MS);
+
+    this.destroyRef.onDestroy(() => {
+      clearInterval(interval);
+      clearTimeout(hideTimer);
+    });
   }
   
   private publishBottom(): void {

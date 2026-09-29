@@ -51,6 +51,37 @@ describe('App', () => {
     expect(items[0].getAttribute('aria-expanded')).toBe('false');
   });
 
+  it('should underline the labels one by one every 3 seconds, pausing while a section is open', () => {
+    jasmine.clock().install();
+    try {
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+      const compiled = fixture.nativeElement as HTMLElement;
+      const buttons = [
+        compiled.querySelector<HTMLButtonElement>('.name-button')!,
+        ...Array.from(compiled.querySelectorAll<HTMLButtonElement>('.menu-item')),
+      ];
+      const hinted = () => buttons.map((b) => b.classList.contains('hint'));
+
+      jasmine.clock().tick(3000);
+      expect(hinted()).toEqual([true, false, false, false, false, false]);
+      jasmine.clock().tick(1500);
+      expect(hinted()).toEqual([false, false, false, false, false, false]);
+      jasmine.clock().tick(1500);
+      expect(hinted()).toEqual([false, true, false, false, false, false]);
+
+      jasmine.clock().tick(5 * 3000);
+      expect(hinted()).toEqual([true, false, false, false, false, false]);
+
+      buttons[1].click();
+      fixture.detectChanges();
+      jasmine.clock().tick(2 * 3000);
+      expect(hinted()).toEqual([false, false, false, false, false, false]);
+    } finally {
+      jasmine.clock().uninstall();
+    }
+  });
+
   it('should link to the project source under the contact details', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.autoDetectChanges();
