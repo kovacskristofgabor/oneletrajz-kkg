@@ -37,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./dist/oneletrajz/browser
+          path: ./dist/oneletrajz
 
   deploy:
     needs: build
